@@ -7,6 +7,7 @@ const fs = require('fs')
 /** this helps to create a file and it will write the content to file */
 fs.writeFileSync('note.txt', 'this file was created by node.js')
 fs.writeFileSync('note.txt', 'second argument this is override the statement of first one')
+/** will read the in terminal */
 fs.readFileSync('note.txt')
 
 /** It will append to the existing file if it have or else it will create a new file */

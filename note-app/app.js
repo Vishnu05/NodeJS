@@ -2,9 +2,10 @@ const yargs = require('yargs')
 
 
 /** To get the input from command line */
-/** process.argv is an array if we want to access the out put an input we can get it by array indexing 
- * node app.js vishnu - first one will give the location of where node has installed 
+/** process.argv is an array if we want to access the output and input we can get it by array indexing 
+ * node app.js vishnu - first index element will give the location of where node has installed 
  * app.js - file location and vishnu argv[2] will get the name of the input
+ * it will always start with the index-2 for accessing the input from command line
  */
 
 //console.log(process.argv)
@@ -24,15 +25,50 @@ console.log(yargs.argv)
 
 yargs.version('1.4.6')
 
+/**
+ *  Running this command in terminal 
+ * node app.js add --title=visnu --body="creating a journal"
+{
+  _: [ 'add' ],
+  title: 'visnu',
+  body: 'creating a journal',
+  '$0': 'app.js'
+}
+Adding a new note
+Title : visnu
+Body : creating a journal
+ */
+
 /** New Note */
 yargs.command({
+    /** This command helps to identify in terminal which one to call and execute */
     command: 'add',
     description: 'Adding a new note',
-  /**hanlder is a function call */
+    /** Builder where we can create the objects and pass as arguments to get the input from command line */
+    builder: {
+        title: {
+            describe: "Title one",
+            /** It is like required, true this object should be there, false no needed */
+            demandOption: true,
+            type: 'string'
+        },
+        body: {
+            describe: "write your notes",
+            demandOption: true,
+            type: 'string'
+
+        }
+    },
+    /**hanlder is a function call */
     handler: () => {
         console.log('Adding a new note')
+        /** argv.title throwed an error, after changing it into yargs.argv.title it is working
+         * we are using yargs libary to get that we must call the argv from yargs or else it is throwing argv is not defined
+         */
+        console.log("Title : " + yargs.argv.title)
+        console.log("Body : " + yargs.argv.body)
     }
-}).argv;
+})
 
 yargs.command({
     command: 'remove',
@@ -48,7 +84,7 @@ yargs.command({
     handler: () => {
         console.log('List')
     }
-}).argv;
+})
 
 yargs.command({
     command: 'read',
@@ -56,4 +92,11 @@ yargs.command({
     handler: () => {
         console.log('Reading')
     }
-})
+}).parse()
+
+/** callback function maybe...? IDK this function will parse our code and run in terminal or else there will be no call
+ * to the functions which we created and output will be printed in terminal
+ */
+yargs.parse()
+
+// console.log(yargs.argv)
