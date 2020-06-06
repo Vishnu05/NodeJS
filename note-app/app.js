@@ -1,4 +1,5 @@
 const yargs = require('yargs')
+const note = require('./getNotes.js')
 
 
 /** To get the input from command line */
@@ -60,21 +61,39 @@ yargs.command({
         }
     },
     /**hanlder is a function call */
-    handler: () => {
+    handler: (argv) => {
         console.log('Adding a new note')
         /** argv.title throwed an error, after changing it into yargs.argv.title it is working
          * we are using yargs libary to get that we must call the argv from yargs or else it is throwing argv is not defined
          */
         console.log("Title : " + yargs.argv.title)
         console.log("Body : " + yargs.argv.body)
+
+        /** from getNotes.js we are calling the function to return getNotes and addNote */
+        note.addNote(argv.title, argv.body)
     }
 })
 
 yargs.command({
     command: 'remove',
-    description: 'removing the note',
-    handler: () => {
-        console.log('Note has been removed')
+    description: 'removing a note',
+    builder: {
+        title: {
+            describe: "Removing the note from list",
+            // demandOption: true
+            /** required is working fine as demandOption */
+            required: true,
+            /** type is not working for me 
+             * it is working fine when I pass the parameter, but it is not throwing error while passing the node command
+             * while printing if the type is number, if i pass string the output is NaN
+             */
+            type: 'string'
+        }
+    },
+    handler: (argv) => {
+        console.log('Note has been removed from hanlder function : ' + argv.title)
+        note.removeNote(argv.title)
+
     }
 }).argv;
 
